@@ -44,27 +44,27 @@
     <h2>Front — street</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-front.jpg" alt="Current boarded front of 4731 Newberry Terrace" />
+        <img id="pic-before-front" alt="Current boarded front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-before">Now</span> Boarded front, tall grass, vacant lots left and right.</figcaption>
       </figure>
       <figure>
-        <img src="img/front.jpg" alt="Proposed front of 4731 Newberry Terrace" />
+        <img id="pic-front" alt="Proposed front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-after">Proposed</span> Boards off, numbered doors, leasing door, solar on the flat roof behind the parapet.</figcaption>
       </figure>
     </div>
     <figure>
-      <img src="img/lots.jpg" alt="Proposed compound with both side lots" />
+      <img id="pic-lots" alt="Proposed compound with both side lots" />
       <figcaption><span class="tag tag-after">Proposed</span> Building plus the two side lots, fenced as one yard. Confirm deeds first.</figcaption>
     </figure>
     <h2>Alley rear</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-alley.jpg" alt="Current alley rear" />
+        <img id="pic-before-alley" alt="Current alley rear" />
         <figcaption><span class="tag tag-before">Now</span> Dump pile and brush. Stairs and rear kitchen doors are still behind the growth.</figcaption>
       </figure>
       <figure>
-        <img src="img/rear.jpg" alt="Proposed rear kitchen doors, stairs, and carport" />
-        <figcaption><span class="tag tag-after">Proposed</span> Two stair runs rebuilt. The tall rear openings are kitchen back doors for the four apartments, not windows. Basement door under the left stair. Office alley door. Carport.</figcaption>
+        <img id="pic-rear" alt="Proposed rear kitchen doors, stairs, and carport" />
+        <figcaption><span class="tag tag-after">Proposed</span> Two stair runs rebuilt. Kitchen back doors kept. Basement door under the left stair. Office alley door. Carport.</figcaption>
       </figure>
     </div>
     <h2>What this building is</h2>
@@ -75,31 +75,31 @@
       <tr><td>Building + site, no solar</td><td class="money">$168,000</td><td class="money">$268,000</td><td class="money">$416,000</td></tr>
       <tr><td>Solar + batteries + generator</td><td class="money">$42,000</td><td class="money">$58,000</td><td class="money">$78,000</td></tr>
       <tr><td><strong>All-in</strong></td><td class="money"><strong>$210,000</strong></td><td class="money"><strong>$326,000</strong></td><td class="money"><strong>$494,000</strong></td></tr>
-      <tr><td>Rebuild 2 rear stair runs + 2 small 2nd-floor landings</td><td class="money">$6,000</td><td class="money">$10,000</td><td class="money">$16,000</td></tr>
-      <tr><td>Optional side-lot code stair</td><td class="money">$12,000</td><td class="money">$16,000</td><td class="money">$20,000</td></tr>
     </table>
-    <h2>Where to buy</h2>
-    <table>
-      <tr><th>Vendor</th><th>What</th></tr>
-      <tr><td>Home Depot Pro Xtra / Lowe’s Pro / Menards Big Card</td><td>LVP, drywall, insulation, RTA cabinets, paint, steel doors, treated stair lumber</td></tr>
-      <tr><td>Habitat ReStore (STL)</td><td>Doors, trim, leftover lights</td></tr>
-      <tr><td>Ferguson via plumber</td><td>Valves, water heaters, PEX</td></tr>
-      <tr><td>Graybar via electrician</td><td>Panels, spec devices, wire</td></tr>
-    </table>
-    <h2>Who</h2>
-    <p><strong>Gynysis Construction</strong> — stairs, landings, drywall, paint, floors, cabinets, fence, carport.</p>
-    <p><strong>Licensed on the City permit:</strong> electrician, plumber, HVAC. Building Division 314-622-3313. Electrical 314-622-4808.</p>
-    <h2>Next</h2>
-    <ol>
-      <li>Confirm deeds on the two side lots.</li>
-      <li>Tape every room.</li>
-      <li>Dumpster, cut lots, rebuild rear stairs to the kitchen doors.</li>
-      <li>File the building permit. Name the licensed plumber and electrician.</li>
-      <li>Secure the basement office doors.</li>
-    </ol>
     <footer>
       <p>4731–4733 Newberry Terrace, St. Louis, MO 63113. After images are design targets. 3 Sep 2026.</p>
     </footer>
   </div>
+  <script>
+    const photos = {
+      "pic-before-front": ["img/before-front.jpg.0.txt","img/before-front.jpg.1.txt"],
+      "pic-front": ["img/front.jpg.0.txt","img/front.jpg.1.txt","img/front.jpg.2.txt"],
+      "pic-lots": ["img/lots.jpg.0.txt","img/lots.jpg.1.txt","img/lots.jpg.2.txt"],
+      "pic-before-alley": ["img/before-alley.jpg.0.txt","img/before-alley.jpg.1.txt"],
+      "pic-rear": ["img/rear.jpg.0.txt","img/rear.jpg.1.txt"]
+    };
+    Object.entries(photos).forEach(([id, parts]) => {
+      Promise.all(parts.map(p => fetch(p).then(r => {
+        if (!r.ok) throw new Error(p + " " + r.status);
+        return r.text();
+      }))).then(chunks => {
+        document.getElementById(id).src = "data:image/jpeg;base64," + chunks.join("").replace(/\s+/g,"");
+      }).catch(err => {
+        console.error(err);
+        const el = document.getElementById(id);
+        el.alt = el.alt + " (photo missing)";
+      });
+    });
+  </script>
 </body>
 </html>
