@@ -16,7 +16,7 @@
     .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     @media (max-width:700px){ .grid { grid-template-columns:1fr; } }
     figure { margin:0 0 18px; background:#fff; border:1px solid #ddd; }
-    figure img { width:100%; display:block; }
+    figure img { width:100%; display:block; min-height:160px; background:#ece8df; }
     figcaption { padding:8px 10px; font-size:13px; color:var(--muted); }
     .tag { display:inline-block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; margin-right:6px; font-weight:bold; }
     .tag-before { background:#5c6b73; color:#fff; }
@@ -44,26 +44,26 @@
     <h2>Front — street</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-front.jpg" alt="Current boarded front of 4731 Newberry Terrace" />
+        <img id="pic-before-front" alt="Current boarded front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-before">Now</span> Boarded front, tall grass, vacant lots left and right.</figcaption>
       </figure>
       <figure>
-        <img src="img/front.jpg" alt="Proposed front of 4731 Newberry Terrace" />
+        <img id="pic-front" alt="Proposed front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-after">Proposed</span> Boards off, numbered doors, leasing door, solar on the flat roof behind the parapet.</figcaption>
       </figure>
     </div>
     <figure>
-      <img src="img/lots.jpg" alt="Proposed compound with both side lots" />
+      <img id="pic-lots" alt="Proposed compound with both side lots" />
       <figcaption><span class="tag tag-after">Proposed</span> Building plus the two side lots, fenced as one yard. Confirm deeds first.</figcaption>
     </figure>
     <h2>Alley rear</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-alley.jpg" alt="Current alley rear" />
+        <img id="pic-before-alley" alt="Current alley rear" />
         <figcaption><span class="tag tag-before">Now</span> Dump pile and brush. Stairs and rear kitchen doors are still behind the growth.</figcaption>
       </figure>
       <figure>
-        <img src="img/rear.jpg" alt="Proposed rear kitchen doors, stairs, and carport" />
+        <img id="pic-rear" alt="Proposed rear kitchen doors, stairs, and carport" />
         <figcaption><span class="tag tag-after">Proposed</span> Two stair runs rebuilt. The tall rear openings are kitchen back doors for the four apartments, not windows. Basement door under the left stair. Office alley door. Carport.</figcaption>
       </figure>
     </div>
@@ -101,5 +101,26 @@
       <p>4731–4733 Newberry Terrace, St. Louis, MO 63113. After images are design targets. 3 Sep 2026.</p>
     </footer>
   </div>
+  <script>
+    const photos = [
+      ["pic-before-front", "img/before-front.jpg.b64"],
+      ["pic-front", "img/front.jpg.b64"],
+      ["pic-lots", "img/lots.jpg.b64"],
+      ["pic-before-alley", "img/before-alley.jpg.b64"],
+      ["pic-rear", "img/rear.jpg.b64"]
+    ];
+    photos.forEach(([id, path]) => {
+      fetch(path).then(r => {
+        if (!r.ok) throw new Error(path + " " + r.status);
+        return r.text();
+      }).then(t => {
+        document.getElementById(id).src = "data:image/jpeg;base64," + t.replace(/\s+/g, "");
+      }).catch(err => {
+        console.error(err);
+        const el = document.getElementById(id);
+        el.alt = el.alt + " (photo missing)";
+      });
+    });
+  </script>
 </body>
 </html>
