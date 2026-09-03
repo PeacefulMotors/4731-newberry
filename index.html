@@ -103,18 +103,18 @@
   </div>
   <script>
     const photos = [
-      ["pic-before-front", "img/before-front.jpg.b64"],
-      ["pic-front", "img/front.jpg.b64"],
-      ["pic-lots", "img/lots.jpg.b64"],
-      ["pic-before-alley", "img/before-alley.jpg.b64"],
-      ["pic-rear", "img/rear.jpg.b64"]
+      ["pic-before-front", ["img/before-front.a.b64", "img/before-front.b.b64"]],
+      ["pic-front", ["img/front.a.b64", "img/front.b.b64", "img/front.c.b64"]],
+      ["pic-lots", ["img/lots.a.b64", "img/lots.b.b64"]],
+      ["pic-before-alley", ["img/before-alley.jpg.b64"]],
+      ["pic-rear", ["img/rear.a.b64", "img/rear.b.b64"]]
     ];
-    photos.forEach(([id, path]) => {
-      fetch(path).then(r => {
-        if (!r.ok) throw new Error(path + " " + r.status);
+    photos.forEach(([id, paths]) => {
+      Promise.all(paths.map(p => fetch(p).then(r => {
+        if (!r.ok) throw new Error(p + " " + r.status);
         return r.text();
-      }).then(t => {
-        document.getElementById(id).src = "data:image/jpeg;base64," + t.replace(/\s+/g, "");
+      }))).then(chunks => {
+        document.getElementById(id).src = "data:image/jpeg;base64," + chunks.join("").replace(/\s+/g, "");
       }).catch(err => {
         console.error(err);
         const el = document.getElementById(id);
