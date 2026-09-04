@@ -44,26 +44,26 @@
     <h2>Front — street</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-front.jpg" alt="Current boarded front of 4731 Newberry Terrace" />
+        <img id="pic-before-front" alt="Current boarded front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-before">Now</span> Boarded front, tall grass, vacant lots left and right.</figcaption>
       </figure>
       <figure>
-        <img src="img/front.jpg" alt="Proposed front of 4731 Newberry Terrace" />
+        <img id="pic-front" alt="Proposed front of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-after">Proposed</span> Boards off, numbered doors, leasing door, solar on the flat roof behind the parapet.</figcaption>
       </figure>
     </div>
     <figure>
-      <img src="img/lots.jpg" alt="Proposed compound with both side lots" />
+      <img id="pic-lots" alt="Proposed compound with both side lots" />
       <figcaption><span class="tag tag-after">Proposed</span> Building plus the two side lots, fenced as one yard. Confirm deeds first.</figcaption>
     </figure>
     <h2>Alley rear</h2>
     <div class="grid">
       <figure>
-        <img src="img/before-alley.jpg" alt="Current alley rear of 4731 Newberry Terrace" />
+        <img id="pic-before-alley" alt="Current alley rear of 4731 Newberry Terrace" />
         <figcaption><span class="tag tag-before">Now</span> Dump pile and brush. Stairs and rear kitchen doors are still behind the growth.</figcaption>
       </figure>
       <figure>
-        <img src="img/rear.jpg" alt="Proposed rear kitchen doors, stairs, and carport" />
+        <img id="pic-rear" alt="Proposed rear kitchen doors, stairs, and carport" />
         <figcaption><span class="tag tag-after">Proposed</span> Two stair runs rebuilt. The tall rear openings are kitchen back doors for the four apartments, not windows. Basement door under the left stair. Office alley door. Carport.</figcaption>
       </figure>
     </div>
@@ -101,5 +101,19 @@
       <p>4731–4733 Newberry Terrace, St. Louis, MO 63113. After images are design targets. 3 Sep 2026.</p>
     </footer>
   </div>
+  <script>
+    const photos = {
+      'pic-before-front': 'img/before-front.jpg.b64',
+      'pic-front': 'img/front.jpg.b64',
+      'pic-lots': 'img/lots.jpg.b64',
+      'pic-before-alley': 'img/before-alley.jpg.b64',
+      'pic-rear': 'img/rear.jpg.b64'
+    };
+    Object.entries(photos).forEach(([id, path]) => {
+      fetch(path).then(r => { if (!r.ok) throw new Error(path + ' ' + r.status); return r.text(); })
+        .then(t => { const el = document.getElementById(id); if (el) el.src = 'data:image/jpeg;base64,' + t.replace(/\s+/g,''); })
+        .catch(err => console.error(err));
+    });
+  </script>
 </body>
 </html>
